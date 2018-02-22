@@ -1,3 +1,4 @@
+.gradle/
 # IDE
 .idea/
 .DS_Store
