@@ -1,0 +1,46 @@
+group 'com.yanni'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'spring-boot'
+
+sourceCompatibility = 1.5
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.10.RELEASE")
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+    compile("org.springframework.boot:spring-boot-starter-web")
+    compile("org.springframework.boot:spring-boot-starter-actuator")
+    //compile(group:'org.mule.modules', name:'spring-config', version:'2.35.4')
+}
+
+
+bootRun {
+    String serviceName = 'boot-app'
+    String debugPort = 9999
+    jvmArgs "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=$debugPort"
+    String executedDir = System.getProperty("user.dir")
+    String configLocation
+    if (executedDir.endsWith('bootapp')) {
+        configLocation = executedDir + "/" + serviceName + "/config/"
+    } else {
+        configLocation = executedDir + "/config/"
+    }
+    systemProperty('spring.config.name', serviceName)
+    systemProperty('spring.config.location', "$configLocation")
+    systemProperty('server.port', 8989)
+    systemProperty('crEnv', 'mydev')
+    systemProperty('crSpringServer', 'yanni')
+}
